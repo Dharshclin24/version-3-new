@@ -3,6 +3,7 @@ import Home from "./pages/Home.jsx";
 import CountryDetails from "./pages/CountryDetails.jsx";
 import SavedCountries from "./pages/SavedCountries.jsx";
 import { useEffect, useState } from "react";
+import App.css from"./
 let allInfo;
 
 export default function App() {
@@ -11,7 +12,7 @@ export default function App() {
 
   const getApiInfo = async () => {
     try {
-      const response = await fetch(`https://restcountries.com/v3.1/all`);
+      const response = await fetch(`https://restcountries.com/v3.1/all?fields=name,flags,population,region,capital`);
       const data = await response.json();
       console.log(data);
       setGatheredApiInfo(data);

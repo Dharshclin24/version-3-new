@@ -1,17 +1,53 @@
-import { useParams } from "react-router";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+
 function CountryDetails({ data }) {
-  //got the parameter from the url
-  //countryName is the name of the country the user selected
-  const countryName = useParams().countryName;
+  const countryName = useParams().country;
+  const [count, setCount] = useState(0);
+//function created to update the count of viewed  countries  when the user views a country.
+//fetch created to gather viewed country data from the api.
+  const updateCount = async () => {
+    try {
+      const response = await fetch("/api/update-one-country-count", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        //body of request count data
+        body: JSON.stringify({
+          country_name: countryName,
+        }),
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const countryData = await response.json();
+      //console.log(countryData, "country data label");
+//created to change the information that was gathered from the response of the api to json. 
+      setCount(countryData.newCount);
+      //created to give the setCount function the value of countryData and new count
+    } catch (error) {
+      console.error("Error updating count:", error);
+    }
+  };
+
+  useEffect(() => {
+    updateCount();
+  }, [countryName]);
+
   //find the object with selected country's details from data.
   //loop through all the counrties in data and find the country whose common name matches the countryname variable
-  let found = data.find((item) => {
-    //console.log(item)
+  let found;
+  if(data) {
+    found= data.find((item) => {
+    console.log(item, "looking for item");
+  
     if (countryName === item.name.common) return true;
   });
-  //console.log(countryName);
+}
+  console.log(countryName, "looking for country name");
   //console.log(data);
-  console.log(found);
+  //console.log(found, "looking for found");
   if (!found) {
     return <div>Loading country details... or Country not found.</div>;
   }
@@ -21,6 +57,8 @@ function CountryDetails({ data }) {
       <div>
         <nav>
           <h1>Welcome to the CountryDetails page</h1>
+          <h2>{count}</h2>
+          {found &&(
           <ul>
             <img src={found.flags.png} alt="country flags" id="imgCard" />
 
@@ -37,8 +75,11 @@ function CountryDetails({ data }) {
               <strong>Capital</strong> {found.capital}
             </li>
           </ul>
+          )}
         </nav>
+          
       </div>
+          
     </>
   );
 }

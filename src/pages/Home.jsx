@@ -42,6 +42,7 @@ function Home({ data }) {
                     <li id="capDard">
                       <strong>Capital</strong> {item.capital}
                     </li>
+                  
                   </ul>
                 </nav>
               </div>

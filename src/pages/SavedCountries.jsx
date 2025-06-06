@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 
-function SavedCountries({ data }) {
+
+function SavedCountries({data}) {
   const [inputs, setInputs] = useState(null);
   const [gottenInfo, setGottenInfo] = useState(null);
 
@@ -54,36 +55,11 @@ function SavedCountries({ data }) {
     storeData();
   };
 
-  // /async function storedCountry() {
-  //   await fetch("/api/save-one-country", {
-  //     method: "POST",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-  //     body: JSON.stringify({
-  //       country_name: "",
-  //     }),
-  //   });
-  // }
-  // const retrievedCountryData = async () => {
-  //   try {
-  //     const response = await fetch(`api/`);
-  //     const data = await response.json();
-  //     console.log(data);
-  //     setGottenInfo(data);
 
-  //created  a fetch to get the newest user information.Named the function retrieved form data
-  //saved the api data into the state variable called gathered ApiInfo state variable and changed the value to data
-  //data is passed as props to the other pages for the information gathered.
-  //   } catch (error) {
-  //     console.error("Oopsies! Error fetching data:", error);
-  //   }
-  //   function renderInfo(inputs) {
-  //     const countryCardData = inputs.name;
-  //     if (countryCardData) {
-  //     }
-  //   }
-  // };
+
+ 
+
+  
   return (
     <>
       <h1>My Profile</h1>
