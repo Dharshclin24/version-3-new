@@ -6,6 +6,8 @@ function Home({ data }) {
   //console.log to insure accurate data
   console.log(localData);
   console.log(localData[1].name.common);
+  
+
 
   return (
     <>

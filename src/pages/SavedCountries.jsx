@@ -1,18 +1,20 @@
 import { useState, useEffect } from "react";
 
-
-function SavedCountries({data}) {
+function SavedCountries({ data }) {
   const [inputs, setInputs] = useState(null);
   const [gottenInfo, setGottenInfo] = useState(null);
+  const [storedCountryData, setStoredCountryData] = useState(null);
 
-  //function created to handle changes made to the form when user inputs data.
+  //global variable declared to store (set mode function)and display data (render in jsx.not set variable)from the api
+
+  // //function defined to handle changes made to the form when user inputs data.
   const handleChange = (event) => {
     const name = event.target.name;
     const value = event.target.value;
     setInputs((values) => ({ ...values, [name]: value }));
   };
 
-  //post request created to send the form data to the API.
+  // //post request created to send the form data to the API.
   async function storeData() {
     await fetch("/api/add-one-user", {
       method: "POST",
@@ -31,15 +33,21 @@ function SavedCountries({data}) {
   const retrievedFormData = async () => {
     try {
       const response = await fetch(`/api/get-newest-user`);
-      const data = await response.json();
-      console.log(data, "data from get newest user");
-      console.log(data[0].name, "new user name");
-
-      setGottenInfo(data[0].name);
-
       //created  a fetch to get the newest user information.Named the function retrieved form data
-      //saved the api data into the state variable called gathered ApiInfo state variable and changed the value to data
-      //data is passed as props to the other pages for the information gathered.
+      const data = await response.json();
+      //console.log(data, "data from get newest user");
+      //console.log(data[0].name, "new user name");
+
+      setGottenInfo(
+        data[0].name,
+        data[0].flags,
+        data[0].capital,
+        data[0].region
+      );
+      console.log(setGottenInfo, "gotten info label");
+      //     //saved the api data into the state variable called gathered ApiInfo state variable and changed the value to data
+
+      //     //data is passed as props to the other pages for the information gathered.
     } catch (error) {
       console.error("Oopsies! Error fetching data:", error);
     }
@@ -55,15 +63,57 @@ function SavedCountries({data}) {
     storeData();
   };
 
+  //post request created to store data when user saves a country.
+  async function oneSavedCountry() {
+    await fetch("/api/save-one-country", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      //request body
+      body: JSON.stringify({
+        country_name: "",
+      }),
+    });
+  }
 
+  //get request created to retrieve a list of all saved countries.
 
- 
+  const allSavedCountries = async () => {
+    try {
+      const response = await fetch(`api/get-all-saved-countries`);
+      //created  a fetch to Retrieve all saved country names..Named the function allSavedCountries
+      const data = await response.json();
+      // console.log(data, "data from get new country");
+      // console.log(data[1].country_name, "new country name");
 
-  
+      setStoredCountryData(data[1].country_name);
+      // console.log(setStoredCountryData, "storedCountryDataLabel");
+    } catch (error) {
+      console.error("Oopsies! Error fetching data:", error);
+    }
+  };
+
+  useEffect(() => {
+    allSavedCountries();
+  }, []);
+  let retrievedCountryData;
+  if (data) {
+    retrievedCountryData = data.find((item) => {
+      //console.log(item, "looking for item");
+      console.log(retrievedCountryData, "label for retrievedcountryData info");
+      console.log(retrievedCountryData,"recieved data label")
+
+      if (setStoredCountryData === data[1].country_name) return true;
+      //console.log(setStoredCountryData, "Where is the country name");
+    });
+  }
+
   return (
     <>
       <h1>My Profile</h1>
       <p>Welcome {gottenInfo}</p>
+      <p>Saved Countries {storedCountryData}</p>
 
       <form onSubmit={handleSubmit}>
         <div id="container">

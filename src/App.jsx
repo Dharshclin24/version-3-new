@@ -37,7 +37,6 @@ export default function App() {
       <nav>
         <ul>
           <li>
-            <h1>Saved Countries</h1>
             <button id="homebutt">
               <Link to="/">Home</Link>
             </button>
